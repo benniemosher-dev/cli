@@ -13,12 +13,16 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 def cli(config, verbose):
     config.verbose = verbose
 
-@cli.command()
-
 @pass_config
-def say(config, string, repeat, out):
-    """This script greets you."""
+@click.group()
+@click.option('--verbose', is_flag=True)
+@pass_config
+def terraform(config, verbose):
+    config.verbose = verbose
+
+@terraform.commands()
+def init(config):
+    """This script inits a Terraform project."""
     if config.verbose:
        click.echo('We are in verbose mode.')
-    for x in range(repeat):
-      click.echo('Hello %s!' % string, file=out)
+    click.echo('terraform init')
